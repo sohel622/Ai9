@@ -38,10 +38,10 @@
         </div>
         
         <div class="flex items-center space-x-3">
-            <!-- GitHub Login / Profile Button -->
-            <button id="githubAuthBtn" onclick="loginWithGitHub()" class="flex items-center space-x-2 bg-githubCard border border-githubBorder hover:bg-githubBorder px-3 py-1.5 rounded-md text-xs font-medium transition shadow-sm">
+            <!-- GitHub Token Connect Button -->
+            <button id="githubAuthBtn" onclick="openTokenModal()" class="flex items-center space-x-2 bg-githubCard border border-githubBorder hover:bg-githubBorder px-3 py-1.5 rounded-md text-xs font-medium transition shadow-sm">
                 <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                <span id="authButtonText">Sign in with GitHub</span>
+                <span id="authButtonText">Connect GitHub Account</span>
             </button>
             <button class="flex items-center space-x-1 bg-githubCard border border-githubBorder hover:bg-githubBorder px-3 py-1.5 rounded-md text-xs font-medium transition shadow-sm">
                 <span class="material-icons text-xs">download</span>
@@ -68,7 +68,6 @@
             <div class="flex flex-wrap items-center justify-between pt-2 border-t border-githubBorder/60 mt-2 gap-2 text-xs">
                 
                 <div class="flex items-center space-x-2">
-                    <!-- Ask Dropdown Trigger -->
                     <button class="flex items-center space-x-1 px-2 py-1 bg-githubDark border border-githubBorder rounded hover:bg-githubBorder text-gray-300">
                         <span class="material-icons text-xs">chat_bubble_outline</span>
                         <span>Ask</span>
@@ -83,26 +82,14 @@
                             <span class="material-icons text-xs">arrow_drop_down</span>
                         </button>
 
-                        <!-- Repositories Dropdown Box (Initially Hidden) -->
+                        <!-- Repositories Dropdown Box -->
                         <div id="repoDropdown" class="hidden absolute left-0 mt-2 w-72 bg-githubCard border border-githubBorder rounded-lg shadow-2xl z-50 p-2">
                             <div class="p-1 border-b border-githubBorder mb-1">
                                 <span class="text-xs font-semibold text-gray-400 block mb-1">Select a repository</span>
                                 <input type="text" id="repoSearch" placeholder="Search repositories..." class="w-full bg-githubDark text-xs px-2 py-1.5 rounded border border-githubBorder text-gray-200 focus:outline-none focus:border-blue-500">
                             </div>
                             <div id="repoList" class="max-h-48 overflow-y-auto space-y-1">
-                                <!-- Real GitHub Repos will load here after login, or fallback demo items -->
-                                <div class="repo-item flex items-center space-x-2 px-2 py-1.5 hover:bg-githubBorder rounded cursor-pointer text-xs">
-                                    <input type="checkbox" class="rounded bg-githubDark border-githubBorder">
-                                    <span class="repo-name text-gray-300">sohel622/Etagdxb</span>
-                                </div>
-                                <div class="repo-item flex items-center space-x-2 px-2 py-1.5 hover:bg-githubBorder rounded cursor-pointer text-xs">
-                                    <input type="checkbox" class="rounded bg-githubDark border-githubBorder">
-                                    <span class="repo-name text-gray-300">sohel622/Flashgram5555</span>
-                                </div>
-                                <div class="repo-item flex items-center space-x-2 px-2 py-1.5 hover:bg-githubBorder rounded cursor-pointer text-xs">
-                                    <input type="checkbox" class="rounded bg-githubDark border-githubBorder">
-                                    <span class="repo-name text-gray-300">sohel622/pixelgram-react</span>
-                                </div>
+                                <div class="p-2 text-xs text-gray-400 text-center" id="repoLoader">Connect GitHub to load real repositories</div>
                             </div>
                         </div>
                     </div>
@@ -122,7 +109,6 @@
                         <span class="text-xs">Optimized for: Efficiency</span>
                         <span class="material-icons text-xs">arrow_drop_down</span>
                     </button>
-                    <!-- Send Button -->
                     <button id="sendBtn" class="p-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded transition">
                         <span class="material-icons text-xs">send</span>
                     </button>
@@ -141,7 +127,7 @@
                 <span class="material-icons text-xs text-purple-400">support_agent</span>
                 <span>Agent</span>
             </button>
-            <button onclick="openIssueModal()" class="flex items-center space-x-1 px-3 py-1.5 bg-githubCard border border-githubBorder hover:bg-githubBorder rounded-lg text-xs text-gray-300 transition">
+            <button onclick="insertAction('Create issue')" class="flex items-center space-x-1 px-3 py-1.5 bg-githubCard border border-githubBorder hover:bg-githubBorder rounded-lg text-xs text-gray-300 transition">
                 <span class="material-icons text-xs text-green-400">add_circle_outline</span>
                 <span>Create issue</span>
             </button>
@@ -155,43 +141,28 @@
             </button>
         </div>
 
-        <!-- Dynamic Chat Response Container -->
-        <div id="chatContainer" class="w-full max-w-2xl mt-6 flex flex-col space-y-3"></div>
-
     </main>
 
-    <!-- Footer Note -->
-    <footer class="w-full py-3 text-center text-xs text-gray-500 border-t border-githubBorder/40">
-        Copilot uses AI. Check for mistakes.
-    </footer>
+    <!-- Token Entry Modal -->
+    <div id="tokenModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-githubCard border border-githubBorder rounded-xl p-5 w-full max-w-md shadow-2xl">
+            <h3 class="text-sm font-semibold text-gray-200 mb-2">Connect GitHub Personal Token</h3>
+            <p class="text-xs text-gray-400 mb-4">আপনার আসল GitHub Repositories লোড করতে Personal Access Token দিন:</p>
+            <input type="password" id="ghTokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxx" class="w-full bg-githubDark border border-githubBorder rounded px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-blue-500 mb-4">
+            <div class="flex justify-end space-x-2">
+                <button onclick="closeTokenModal()" class="px-3 py-1.5 text-xs text-gray-400 hover:text-white">Cancel</button>
+                <button onclick="saveTokenAndFetchRepos()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded text-xs font-medium">Connect & Load</button>
+            </div>
+        </div>
+    </div>
 
-    <!-- JavaScript Logic & GitHub OAuth Handler -->
+    <!-- JavaScript Logic -->
     <script>
-        const CLIENT_ID = 'Ov23linzpMw90Zhn3jb2';
-        const REDIRECT_URI = window.location.origin + window.location.pathname;
-
-        // GitHub Login Function
-        function loginWithGitHub() {
-            const url = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=repo`;
-            window.location.href = url;
-        }
-
-        // Check if returning from GitHub with a code
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
-            if (code) {
-                document.getElementById('authButtonText').textContent = 'Connected (GitHub)';
-                document.getElementById('githubAuthBtn').classList.add('border-green-500', 'text-green-400');
-                // Note: Full token exchange requires a backend server due to GitHub's client secret security, 
-                // but your UI is now successfully hooked with GitHub auth flow state!
-            }
-        };
-
-        // Repositories Dropdown Toggle
         const repoBtn = document.getElementById('repoBtn');
         const repoDropdown = document.getElementById('repoDropdown');
-        
+        const repoList = document.getElementById('repoList');
+
+        // Dropdown toggle
         if (repoBtn && repoDropdown) {
             repoBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -204,28 +175,76 @@
             });
         }
 
-        // Repository selection logic
-        const repoList = document.getElementById('repoList');
-        if (repoList) {
-            const items = repoList.querySelectorAll('.repo-item');
-            items.forEach(item => {
-                item.addEventListener('click', () => {
-                    const name = item.querySelector('.repo-name').textContent.trim();
-                    document.getElementById('selectedRepoName').textContent = name;
-                    repoDropdown.classList.add('hidden');
-                });
-            });
+        function openTokenModal() {
+            document.getElementById('tokenModal').classList.remove('hidden');
         }
 
-        // Quick action insertion
+        function closeTokenModal() {
+            document.getElementById('tokenModal').classList.add('hidden');
+        }
+
+        // Fetch Real Repositories using GitHub API
+        async function fetchRealRepos(token) {
+            try {
+                const response = await fetch('https://api.github.com/user/repos?sort=updated&per_page=30', {
+                    headers: {
+                        'Authorization': `token ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Invalid Token');
+
+                const repos = await response.json();
+                repoList.innerHTML = '';
+
+                if (repos.length === 0) {
+                    repoList.innerHTML = '<div class="p-2 text-xs text-gray-400 text-center">No Repositories Found</div>';
+                    return;
+                }
+
+                repos.forEach(repo => {
+                    const item = document.createElement('div');
+                    item.className = 'repo-item flex items-center space-x-2 px-2 py-1.5 hover:bg-githubBorder rounded cursor-pointer text-xs';
+                    item.innerHTML = `
+                        <span class="material-icons text-xs text-gray-400">folder_open</span>
+                        <span class="repo-name text-gray-300 font-mono">${repo.full_name}</span>
+                    `;
+                    item.onclick = () => {
+                        document.getElementById('selectedRepoName').textContent = repo.full_name;
+                        repoDropdown.classList.add('hidden');
+                    };
+                    repoList.appendChild(item);
+                });
+
+                document.getElementById('authButtonText').textContent = 'GitHub Connected';
+                document.getElementById('githubAuthBtn').classList.add('border-green-500', 'text-green-400');
+
+            } catch (err) {
+                alert('GitHub কানেক্ট করা সম্ভব হয়নি! সঠিক Token দিন।');
+            }
+        }
+
+        function saveTokenAndFetchRepos() {
+            const token = document.getElementById('ghTokenInput').value.trim();
+            if (token) {
+                localStorage.setItem('gh_pat', token);
+                fetchRealRepos(token);
+                closeTokenModal();
+            }
+        }
+
+        // Auto load if token already saved
+        window.onload = function() {
+            const savedToken = localStorage.getItem('gh_pat');
+            if (savedToken) {
+                fetchRealRepos(savedToken);
+            }
+        };
+
         function insertAction(actionText) {
             const input = document.getElementById('promptInput');
             input.value = `[${actionText}] ` + input.value;
             input.focus();
-        }
-
-        function openIssueModal() {
-            alert('Create Issue ফিচারটি সিলেক্ট করা হয়েছে।');
         }
     </script>
 </body>
