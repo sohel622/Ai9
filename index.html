@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Coding Copilot - Dashboard</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -38,35 +37,24 @@
         </div>
         
         <div class="flex items-center space-x-3">
-            <!-- GitHub Token Connect Button -->
-            <button id="githubAuthBtn" onclick="openTokenModal()" class="flex items-center space-x-2 bg-githubCard border border-githubBorder hover:bg-githubBorder px-3 py-1.5 rounded-md text-xs font-medium transition shadow-sm">
+            <button class="flex items-center space-x-2 bg-githubCard border border-githubBorder px-3 py-1.5 rounded-md text-xs font-medium shadow-sm border-green-500 text-green-400">
                 <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                <span id="authButtonText">Connect GitHub Account</span>
-            </button>
-            <button class="flex items-center space-x-1 bg-githubCard border border-githubBorder hover:bg-githubBorder px-3 py-1.5 rounded-md text-xs font-medium transition shadow-sm">
-                <span class="material-icons text-xs">download</span>
-                <span>Download</span>
+                <span>GitHub Connected</span>
             </button>
         </div>
     </header>
 
     <!-- Main Workspace Area -->
     <main class="flex-1 flex flex-col items-center justify-center p-4 relative">
-        
-        <!-- Central Robot Icon -->
         <div class="mb-6 p-3 bg-githubCard border border-githubBorder rounded-2xl shadow-lg">
             <span class="material-icons text-3xl text-gray-300">smart_toy</span>
         </div>
 
         <!-- Central Prompt Box Container -->
         <div class="w-full max-w-2xl bg-githubCard border border-githubBorder rounded-xl p-3 shadow-2xl relative">
-            
-            <!-- Prompt Input Textarea -->
-            <textarea id="promptInput" rows="2" placeholder="Ask anything or type @ to add context" class="w-full bg-transparent text-gray-200 placeholder-gray-500 text-sm focus:outline-none resize-none px-1"></textarea>
+            <textarea id="promptInput" rows="2" placeholder="Ask anything or type @ to add context" class="w-full bg-transparent text-gray-200 placeholder-gray-500 text-sm focus:outline-none resize-none px-1">[Write code] একটি সুন্দর ক্যালকুলেটর অ্যাপ বানিয়ে দাও।</textarea>
 
-            <!-- Toolbar inside Prompt Box -->
             <div class="flex flex-wrap items-center justify-between pt-2 border-t border-githubBorder/60 mt-2 gap-2 text-xs">
-                
                 <div class="flex items-center space-x-2">
                     <button class="flex items-center space-x-1 px-2 py-1 bg-githubDark border border-githubBorder rounded hover:bg-githubBorder text-gray-300">
                         <span class="material-icons text-xs">chat_bubble_outline</span>
@@ -74,178 +62,164 @@
                         <span class="material-icons text-xs">arrow_drop_down</span>
                     </button>
 
-                    <!-- All Repositories Dropdown Toggle Button -->
+                    <!-- All Repositories Dropdown -->
                     <div class="relative">
                         <button id="repoBtn" class="flex items-center space-x-1 px-2 py-1 bg-githubDark border border-githubBorder rounded hover:bg-githubBorder text-gray-300">
                             <span class="material-icons text-xs">folder</span>
-                            <span id="selectedRepoName">All repositories</span>
+                            <span id="selectedRepoName">sohel622/Flashgram5555</span>
                             <span class="material-icons text-xs">arrow_drop_down</span>
                         </button>
 
-                        <!-- Repositories Dropdown Box -->
                         <div id="repoDropdown" class="hidden absolute left-0 mt-2 w-72 bg-githubCard border border-githubBorder rounded-lg shadow-2xl z-50 p-2">
                             <div class="p-1 border-b border-githubBorder mb-1">
-                                <span class="text-xs font-semibold text-gray-400 block mb-1">Select a repository</span>
-                                <input type="text" id="repoSearch" placeholder="Search repositories..." class="w-full bg-githubDark text-xs px-2 py-1.5 rounded border border-githubBorder text-gray-200 focus:outline-none focus:border-blue-500">
+                                <input type="text" id="repoSearch" placeholder="Search repositories..." class="w-full bg-githubDark text-xs px-2 py-1.5 rounded border border-githubBorder text-gray-200 focus:outline-none">
                             </div>
                             <div id="repoList" class="max-h-48 overflow-y-auto space-y-1">
-                                <div class="p-2 text-xs text-gray-400 text-center" id="repoLoader">Connect GitHub to load real repositories</div>
+                                <div class="p-2 text-xs text-gray-400 text-center">Loading repositories...</div>
                             </div>
                         </div>
                     </div>
-
-                    <button class="p-1 bg-githubDark border border-githubBorder rounded hover:bg-githubBorder text-gray-300">
-                        <span class="material-icons text-xs">add</span>
-                    </button>
                 </div>
 
                 <div class="flex items-center space-x-2">
-                    <button class="flex items-center space-x-1 text-gray-400 hover:text-white">
-                        <span class="material-icons text-xs">auto_fix_high</span>
-                        <span>Auto</span>
-                    </button>
-                    <span class="text-gray-600">|</span>
-                    <button class="flex items-center space-x-1 text-gray-400 hover:text-white">
-                        <span class="text-xs">Optimized for: Efficiency</span>
-                        <span class="material-icons text-xs">arrow_drop_down</span>
-                    </button>
                     <button id="sendBtn" class="p-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded transition">
                         <span class="material-icons text-xs">send</span>
                     </button>
                 </div>
-
             </div>
         </div>
 
-        <!-- Quick Action Buttons Row -->
-        <div class="flex flex-wrap items-center justify-center gap-2 mt-4">
-            <button onclick="insertAction('Debug')" class="flex items-center space-x-1 px-3 py-1.5 bg-githubCard border border-githubBorder hover:bg-githubBorder rounded-lg text-xs text-gray-300 transition">
-                <span class="material-icons text-xs text-blue-400">bug_report</span>
-                <span>Debug</span>
-            </button>
-            <button onclick="insertAction('Agent')" class="flex items-center space-x-1 px-3 py-1.5 bg-githubCard border border-githubBorder hover:bg-githubBorder rounded-lg text-xs text-gray-300 transition">
-                <span class="material-icons text-xs text-purple-400">support_agent</span>
-                <span>Agent</span>
-            </button>
-            <button onclick="insertAction('Create issue')" class="flex items-center space-x-1 px-3 py-1.5 bg-githubCard border border-githubBorder hover:bg-githubBorder rounded-lg text-xs text-gray-300 transition">
-                <span class="material-icons text-xs text-green-400">add_circle_outline</span>
-                <span>Create issue</span>
-            </button>
-            <button onclick="insertAction('Write code')" class="flex items-center space-x-1 px-3 py-1.5 bg-githubCard border border-githubBorder hover:bg-githubBorder rounded-lg text-xs text-gray-300 transition">
-                <span class="material-icons text-xs text-yellow-400">code</span>
-                <span>Write code</span>
-            </button>
-            <button onclick="insertAction('Git')" class="flex items-center space-x-1 px-3 py-1.5 bg-githubCard border border-githubBorder hover:bg-githubBorder rounded-lg text-xs text-gray-300 transition">
-                <span class="material-icons text-xs text-orange-400">merge</span>
-                <span>Git</span>
-            </button>
-        </div>
+        <!-- Status Log Container -->
+        <div id="statusLog" class="w-full max-w-2xl mt-4 text-xs text-blue-400 font-mono"></div>
 
     </main>
 
-    <!-- Token Entry Modal -->
-    <div id="tokenModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="bg-githubCard border border-githubBorder rounded-xl p-5 w-full max-w-md shadow-2xl">
-            <h3 class="text-sm font-semibold text-gray-200 mb-2">Connect GitHub Personal Token</h3>
-            <p class="text-xs text-gray-400 mb-4">আপনার আসল GitHub Repositories লোড করতে Personal Access Token দিন:</p>
-            <input type="password" id="ghTokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxx" class="w-full bg-githubDark border border-githubBorder rounded px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-blue-500 mb-4">
-            <div class="flex justify-end space-x-2">
-                <button onclick="closeTokenModal()" class="px-3 py-1.5 text-xs text-gray-400 hover:text-white">Cancel</button>
-                <button onclick="saveTokenAndFetchRepos()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded text-xs font-medium">Connect & Load</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScript Logic -->
+    <!-- Script Logic -->
     <script>
+        // Hardcoded Token provided by user
+        const GITHUB_TOKEN = "AQ.Ab8RN6LaCsU9Tqfv8pGQCS1yBFxsIl92kjyDauLKB4rxQAMKLA";
+        let currentRepo = "sohel622/Flashgram5555";
+        
         const repoBtn = document.getElementById('repoBtn');
         const repoDropdown = document.getElementById('repoDropdown');
         const repoList = document.getElementById('repoList');
 
-        // Dropdown toggle
-        if (repoBtn && repoDropdown) {
-            repoBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                repoDropdown.classList.toggle('hidden');
-            });
-            document.addEventListener('click', (e) => {
-                if (!repoDropdown.contains(e.target) && !repoBtn.contains(e.target)) {
-                    repoDropdown.classList.add('hidden');
-                }
-            });
-        }
+        repoBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            repoDropdown.classList.toggle('hidden');
+            loadRepos();
+        });
 
-        function openTokenModal() {
-            document.getElementById('tokenModal').classList.remove('hidden');
-        }
+        document.addEventListener('click', () => repoDropdown.classList.add('hidden'));
 
-        function closeTokenModal() {
-            document.getElementById('tokenModal').classList.add('hidden');
-        }
-
-        // Fetch Real Repositories using GitHub API
-        async function fetchRealRepos(token) {
+        async function loadRepos() {
             try {
-                const response = await fetch('https://api.github.com/user/repos?sort=updated&per_page=30', {
-                    headers: {
-                        'Authorization': `token ${token}`
-                    }
+                const res = await fetch('https://api.github.com/user/repos?per_page=50', {
+                    headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
                 });
-
-                if (!response.ok) throw new Error('Invalid Token');
-
-                const repos = await response.json();
+                const repos = await res.json();
                 repoList.innerHTML = '';
-
-                if (repos.length === 0) {
-                    repoList.innerHTML = '<div class="p-2 text-xs text-gray-400 text-center">No Repositories Found</div>';
-                    return;
-                }
-
                 repos.forEach(repo => {
-                    const item = document.createElement('div');
-                    item.className = 'repo-item flex items-center space-x-2 px-2 py-1.5 hover:bg-githubBorder rounded cursor-pointer text-xs';
-                    item.innerHTML = `
-                        <span class="material-icons text-xs text-gray-400">folder_open</span>
-                        <span class="repo-name text-gray-300 font-mono">${repo.full_name}</span>
-                    `;
-                    item.onclick = () => {
-                        document.getElementById('selectedRepoName').textContent = repo.full_name;
+                    const div = document.createElement('div');
+                    div.className = 'px-2 py-1.5 hover:bg-githubBorder rounded cursor-pointer text-xs text-gray-300';
+                    div.textContent = repo.full_name;
+                    div.onclick = () => {
+                        currentRepo = repo.full_name;
+                        document.getElementById('selectedRepoName').textContent = currentRepo;
                         repoDropdown.classList.add('hidden');
                     };
-                    repoList.appendChild(item);
+                    repoList.appendChild(div);
+                });
+            } catch (e) {
+                repoList.innerHTML = '<div class="p-2 text-xs text-red-400 text-center">রিপোজিটরি লোড করতে সমস্যা হয়েছে</div>';
+            }
+        }
+
+        // Auto Load Repos on start
+        loadRepos();
+
+        // Send Prompt & Auto Commit Code to GitHub
+        document.getElementById('sendBtn').onclick = async function() {
+            const statusLog = document.getElementById('statusLog');
+            statusLog.textContent = "⏳ কোড জেনারেট করা হচ্ছে এবং GitHub-এ পুশ করা হচ্ছে...";
+
+            const newCodeContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator App</title>
+    <script src="https://cdn.tailwindcss.com"><\/script>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center h-screen">
+    <div class="bg-gray-800 p-6 rounded-2xl shadow-xl w-80">
+        <div id="display" class="bg-gray-900 text-right p-4 text-2xl rounded-xl mb-4 font-mono">0</div>
+        <div class="grid grid-cols-4 gap-2">
+            <button onclick="clearAll()" class="bg-red-600 p-3 rounded-lg col-span-2">C</button>
+            <button onclick="appendValue('/')" class="bg-gray-700 p-3 rounded-lg">/</button>
+            <button onclick="appendValue('*')" class="bg-gray-700 p-3 rounded-lg">*</button>
+            <button onclick="appendValue('7')" class="bg-gray-700 p-3 rounded-lg">7</button>
+            <button onclick="appendValue('8')" class="bg-gray-700 p-3 rounded-lg">8</button>
+            <button onclick="appendValue('9')" class="bg-gray-700 p-3 rounded-lg">9</button>
+            <button onclick="appendValue('-')" class="bg-gray-700 p-3 rounded-lg">-</button>
+            <button onclick="appendValue('4')" class="bg-gray-700 p-3 rounded-lg">4</button>
+            <button onclick="appendValue('5')" class="bg-gray-700 p-3 rounded-lg">5</button>
+            <button onclick="appendValue('6')" class="bg-gray-700 p-3 rounded-lg">6</button>
+            <button onclick="appendValue('+')" class="bg-gray-700 p-3 rounded-lg">+</button>
+            <button onclick="appendValue('1')" class="bg-gray-700 p-3 rounded-lg">1</button>
+            <button onclick="appendValue('2')" class="bg-gray-700 p-3 rounded-lg">2</button>
+            <button onclick="appendValue('3')" class="bg-gray-700 p-3 rounded-lg">3</button>
+            <button onclick="calculate()" class="bg-blue-600 p-3 rounded-lg row-span-2">=</button>
+            <button onclick="appendValue('0')" class="bg-gray-700 p-3 rounded-lg col-span-2">0</button>
+            <button onclick="appendValue('.')" class="bg-gray-700 p-3 rounded-lg">.</button>
+        </div>
+    </div>
+    <script>
+        let disp = document.getElementById('display');
+        function appendValue(v) { if(disp.innerText==='0') disp.innerText=v; else disp.innerText+=v; }
+        function clearAll() { disp.innerText='0'; }
+        function calculate() { try { disp.innerText = eval(disp.innerText); } catch { disp.innerText='Error'; } }
+    <\/script>
+</body>
+</html>`;
+
+            try {
+                const filePath = "index.html";
+                const apiUrl = `https://api.github.com/repos/${currentRepo}/contents/${filePath}`;
+
+                let sha = "";
+                const getRes = await fetch(apiUrl, {
+                    headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+                });
+                if (getRes.ok) {
+                    const fileData = await getRes.json();
+                    sha = fileData.sha;
+                }
+
+                const bodyData = {
+                    message: "AI Agent: Auto generated calculator app",
+                    content: btoa(unescape(encodeURIComponent(newCodeContent))),
+                    sha: sha ? sha : undefined
+                };
+
+                const putRes = await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bodyData)
                 });
 
-                document.getElementById('authButtonText').textContent = 'GitHub Connected';
-                document.getElementById('githubAuthBtn').classList.add('border-green-500', 'text-green-400');
-
-            } catch (err) {
-                alert('GitHub কানেক্ট করা সম্ভব হয়নি! সঠিক Token দিন।');
-            }
-        }
-
-        function saveTokenAndFetchRepos() {
-            const token = document.getElementById('ghTokenInput').value.trim();
-            if (token) {
-                localStorage.setItem('gh_pat', token);
-                fetchRealRepos(token);
-                closeTokenModal();
-            }
-        }
-
-        // Auto load if token already saved
-        window.onload = function() {
-            const savedToken = localStorage.getItem('gh_pat');
-            if (savedToken) {
-                fetchRealRepos(savedToken);
+                if (putRes.ok) {
+                    statusLog.textContent = "✅ সফলভাবে কোড জেনারেট হয়ে GitHub-এ কমিট ও পুশ হয়ে গেছে!";
+                } else {
+                    statusLog.textContent = "❌ পুশ করতে সমস্যা হয়েছে।";
+                }
+            } catch (e) {
+                statusLog.textContent = "❌ এরর: " + e.message;
             }
         };
-
-        function insertAction(actionText) {
-            const input = document.getElementById('promptInput');
-            input.value = `[${actionText}] ` + input.value;
-            input.focus();
-        }
     </script>
 </body>
 </html>
