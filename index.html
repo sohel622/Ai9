@@ -1,0 +1,356 @@
+```html
+<!DOCTYPE html>
+<html lang="bn" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Copilot & Repository Workspace</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg: '#0b0f17',
+              card: '#151b26',
+              border: '#232d3f',
+              hover: '#1c2536',
+              accent: '#3b82f6',
+              text: '#e2e8f0',
+              muted: '#8b949e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f17;
+      color: #e2e8f0;
+      overflow-x: hidden;
+    }
+    code, pre {
+      font-family: 'Fira Code', monospace;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f17;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #232d3f;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #374151;
+    }
+    
+    .dropdown-shadow {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.7);
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col justify-between overflow-hidden select-none">
+
+  <!-- TOP HEADER BAR -->
+  <header class="h-14 border-b border-brand-border px-4 flex items-center justify-between bg-brand-bg z-20">
+    <div class="flex items-center space-x-2">
+      <button id="toggleSidebar" class="p-2 text-brand-muted hover:text-white hover:bg-brand-hover rounded-lg transition-colors" title="Toggle Sidebar">
+        <i class="fa-solid fa-bars text-lg"></i>
+      </button>
+      <button id="newChatBtn" class="p-2 text-brand-muted hover:text-white hover:bg-brand-hover rounded-lg transition-colors" title="New Workspace">
+        <i class="fa-regular fa-pen-to-square text-lg"></i>
+      </button>
+    </div>
+
+    <div class="flex items-center space-x-3">
+      <!-- Download Dropdown -->
+      <div class="relative">
+        <button id="downloadBtn" class="flex items-center space-x-2 px-3 py-1.5 bg-brand-card hover:bg-brand-hover border border-brand-border rounded-lg text-xs font-medium text-slate-200 transition-colors">
+          <i class="fa-brands fa-github text-sm"></i>
+          <span>Download</span>
+          <i class="fa-solid fa-chevron-down text-[10px] text-brand-muted"></i>
+        </button>
+
+        <div id="downloadMenu" class="hidden absolute right-0 mt-2 w-48 bg-brand-card border border-brand-border rounded-xl dropdown-shadow py-1.5 z-50">
+          <a href="#" class="flex items-center space-x-2 px-3 py-2 text-xs text-slate-300 hover:bg-brand-hover hover:text-white">
+            <i class="fa-solid fa-file-arrow-down w-4"></i>
+            <span>Export ZIP</span>
+          </a>
+          <a href="#" class="flex items-center space-x-2 px-3 py-2 text-xs text-slate-300 hover:bg-brand-hover hover:text-white">
+            <i class="fa-brands fa-git-alt w-4"></i>
+            <span>Push to GitHub</span>
+          </a>
+          <div class="my-1 border-t border-brand-border"></div>
+          <a href="#" class="flex items-center space-x-2 px-3 py-2 text-xs text-slate-300 hover:bg-brand-hover hover:text-white">
+            <i class="fa-solid fa-code w-4"></i>
+            <span>Copy Snippet</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- User Profile Avatar -->
+      <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-semibold text-xs text-white border border-blue-400/30 cursor-pointer" title="sohel622">
+        S
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="flex-1 overflow-y-auto relative flex flex-col items-center justify-center p-4" id="mainWorkspace">
+    
+    <!-- Dynamic Chat Container (Hidden by default, shown when user prompts) -->
+    <div id="chatMessages" class="w-full max-w-4xl flex-1 overflow-y-auto mb-4 space-y-4 hidden pt-4 px-2">
+      <!-- Dynamically Injected Messages -->
+    </div>
+
+    <!-- Centered AI Robot Logo Icon (Matches Screenshot) -->
+    <div id="heroIcon" class="mb-6 flex flex-col items-center animate-fade-in">
+      <div class="w-16 h-16 rounded-2xl bg-brand-card border border-brand-border flex items-center justify-center shadow-2xl relative group">
+        <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+        <svg class="w-10 h-10 text-slate-200 relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="10" rx="2" />
+          <circle cx="12" cy="5" r="2" />
+          <path d="M12 7v4" />
+          <line x1="8" y1="15" x2="8" y2="15.01" stroke-width="3" />
+          <line x1="16" y1="15" x2="16" y2="15.01" stroke-width="3" />
+          <path d="M9 18h6" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- MAIN PROMPT BOX CONTAINER -->
+    <div class="w-full max-w-3xl relative">
+      <div class="bg-brand-card border border-brand-border rounded-2xl p-3 shadow-2xl focus-within:border-slate-500 transition-all duration-200">
+        
+        <!-- Textarea Input -->
+        <textarea 
+          id="promptInput"
+          rows="3" 
+          placeholder="Ask anything or type @ to add context" 
+          class="w-full bg-transparent text-slate-100 placeholder-brand-muted outline-none resize-none text-sm px-2 pt-1 font-normal leading-relaxed"></textarea>
+
+        <!-- Input Controls Toolbar (Matches Screenshot exactly) -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-brand-border/40 mt-1">
+          
+          <!-- Left Controls (Mode, Repo, Attach) -->
+          <div class="flex flex-wrap items-center gap-1.5">
+            
+            <!-- Ask Selector Dropdown -->
+            <div class="relative">
+              <button id="askModeBtn" class="flex items-center space-x-1.5 px-2.5 py-1 bg-brand-bg hover:bg-brand-hover border border-brand-border rounded-lg text-xs font-medium text-slate-300">
+                <i class="fa-regular fa-comment text-brand-muted text-[11px]"></i>
+                <span id="currentAskMode">Ask</span>
+                <i class="fa-solid fa-chevron-down text-[9px] text-brand-muted"></i>
+              </button>
+
+              <div id="askModeMenu" class="hidden absolute left-0 bottom-full mb-2 w-32 bg-brand-card border border-brand-border rounded-xl dropdown-shadow py-1 z-50">
+                <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white flex items-center space-x-2" onclick="setAskMode('Ask')">
+                  <i class="fa-regular fa-comment w-4"></i>
+                  <span>Ask</span>
+                </button>
+                <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white flex items-center space-x-2" onclick="setAskMode('Architect')">
+                  <i class="fa-solid fa-sitemap w-4"></i>
+                  <span>Architect</span>
+                </button>
+                <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white flex items-center space-x-2" onclick="setAskMode('Code')">
+                  <i class="fa-solid fa-code w-4"></i>
+                  <span>Code</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- All Repositories Dropdown Toggle (Matches 2nd Screenshot) -->
+            <div class="relative">
+              <button id="repoDropdownBtn" class="flex items-center space-x-1.5 px-2.5 py-1 bg-brand-bg hover:bg-brand-hover border border-brand-border rounded-lg text-xs font-medium text-slate-300">
+                <i class="fa-regular fa-bookmark text-brand-muted text-[11px]"></i>
+                <span id="selectedRepoLabel" class="max-w-[140px] truncate">All repositories</span>
+                <i class="fa-solid fa-chevron-down text-[9px] text-brand-muted"></i>
+              </button>
+
+              <!-- REPOSITORY DROPDOWN PANEL (MATCHES SCREENSHOT 2) -->
+              <div id="repoMenu" class="hidden absolute left-0 bottom-full mb-2 w-80 bg-[#0d1117] border border-brand-border rounded-2xl dropdown-shadow p-2 z-50">
+                <div class="text-[11px] font-semibold text-slate-400 px-2 py-1 mb-1">Select a repository</div>
+                
+                <!-- Search Box Inside Dropdown -->
+                <div class="relative mb-2">
+                  <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-brand-muted"></i>
+                  <input 
+                    type="text" 
+                    id="repoSearchInput"
+                    placeholder="Search" 
+                    class="w-full bg-[#161b22] border border-blue-500/80 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 outline-none focus:ring-1 focus:ring-blue-500">
+                </div>
+
+                <!-- Repo List -->
+                <div class="max-h-56 overflow-y-auto space-y-1 pr-1" id="repoList">
+                  
+                  <div class="repo-item flex items-center space-x-2.5 p-2 rounded-lg hover:bg-brand-hover cursor-pointer text-xs" onclick="selectRepo('sohel622/Etagdxb')">
+                    <input type="checkbox" class="rounded border-slate-700 bg-slate-900 text-blue-600 focus:ring-0 pointer-events-none">
+                    <i class="fa-regular fa-bookmark text-brand-muted"></i>
+                    <span class="text-slate-200 truncate font-mono">sohel622/Etagdxb</span>
+                  </div>
+
+                  <div class="repo-item flex items-center space-x-2.5 p-2 rounded-lg hover:bg-brand-hover cursor-pointer text-xs" onclick="selectRepo('sohel622/pixelgram-react-7860acfc')">
+                    <input type="checkbox" class="rounded border-slate-700 bg-slate-900 text-blue-600 focus:ring-0 pointer-events-none">
+                    <i class="fa-regular fa-bookmark text-brand-muted"></i>
+                    <span class="text-slate-200 truncate font-mono">sohel622/pixelgram-react-7860acfc</span>
+                  </div>
+
+                  <div class="repo-item flex items-center space-x-2.5 p-2 rounded-lg hover:bg-brand-hover cursor-pointer text-xs" onclick="selectRepo('sohel622/pixel-perfect-capture-234')">
+                    <input type="checkbox" class="rounded border-slate-700 bg-slate-900 text-blue-600 focus:ring-0 pointer-events-none">
+                    <i class="fa-regular fa-bookmark text-brand-muted"></i>
+                    <span class="text-slate-200 truncate font-mono">sohel622/pixel-perfect-capture-234</span>
+                  </div>
+
+                  <div class="repo-item flex items-center space-x-2.5 p-2 rounded-lg hover:bg-brand-hover cursor-pointer text-xs" onclick="selectRepo('sohel622/Flashgram5555')">
+                    <input type="checkbox" class="rounded border-slate-700 bg-slate-900 text-blue-600 focus:ring-0 pointer-events-none">
+                    <i class="fa-regular fa-bookmark text-brand-muted"></i>
+                    <span class="text-slate-200 truncate font-mono">sohel622/Flashgram5555</span>
+                  </div>
+
+                  <div class="repo-item flex items-center space-x-2.5 p-2 rounded-lg hover:bg-brand-hover cursor-pointer text-xs" onclick="selectRepo('sohel622/pixelgram-react-dc99af37')">
+                    <input type="checkbox" class="rounded border-slate-700 bg-slate-900 text-blue-600 focus:ring-0 pointer-events-none">
+                    <i class="fa-regular fa-bookmark text-brand-muted"></i>
+                    <span class="text-slate-200 truncate font-mono">sohel622/pixelgram-react-dc99af37</span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Add Context Button (+) -->
+            <button class="p-1.5 px-2 bg-brand-bg hover:bg-brand-hover border border-brand-border rounded-lg text-xs text-brand-muted hover:text-white transition-colors" title="Add context">
+              <i class="fa-solid fa-plus text-[11px]"></i>
+            </button>
+          </div>
+
+          <!-- Right Controls (Auto, Efficiency, Submit) -->
+          <div class="flex items-center space-x-1.5">
+            
+            <!-- Auto Mode Dropdown -->
+            <div class="relative">
+              <button id="autoModeBtn" class="flex items-center space-x-1.5 px-2.5 py-1 bg-brand-bg hover:bg-brand-hover border border-brand-border rounded-lg text-xs font-medium text-slate-300">
+                <i class="fa-solid fa-[#7c3aed] fa-sliders text-indigo-400 text-[11px]"></i>
+                <span id="currentAutoLabel">Auto</span>
+                <i class="fa-solid fa-chevron-down text-[9px] text-brand-muted"></i>
+              </button>
+
+              <div id="autoModeMenu" class="hidden absolute right-0 bottom-full mb-2 w-32 bg-brand-card border border-brand-border rounded-xl dropdown-shadow py-1 z-50">
+                <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white" onclick="setAutoMode('Auto')">Auto</button>
+                <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white" onclick="setAutoMode('Fast')">Fast</button>
+                <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white" onclick="setAutoMode('Precise')">Precise</button>
+              </div>
+            </div>
+
+            <!-- Optimization Selector -->
+            <div class="relative">
+              <button id="optBtn" class="flex items-center space-x-1 px-2 py-1 bg-brand-bg hover:bg-brand-hover border border-brand-border rounded-lg text-xs font-medium text-slate-300">
+                <span id="optLabel">Optimized for: Efficiency</span>
+                <i class="fa-solid fa-chevron-down text-[9px] text-brand-muted"></i>
+              </button>
+
+              <div id="optMenu" class="hidden absolute right-0 bottom-full mb-2 w-48 bg-brand-card border border-brand-border rounded-xl dropdown-shadow py-1 z-50">
+                <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white" onclick="setOpt('Optimized for: Efficiency')">Optimized for: Efficiency</button>
+                <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white" onclick="setOpt('Optimized for: Quality')">Optimized for: Quality</button>
+              </div>
+            </div>
+
+            <!-- Submit Send Button -->
+            <button id="sendBtn" class="p-1.5 px-2.5 bg-slate-800 hover:bg-blue-600 text-slate-400 hover:text-white border border-brand-border rounded-lg transition-all duration-200">
+              <i class="fa-solid fa-paper-plane text-xs"></i>
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Quick Action Chip Buttons (Below Prompt Box, Matches Screenshot 1) -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mt-4">
+        
+        <button class="flex items-center space-x-2 px-3 py-1.5 bg-brand-card hover:bg-brand-hover border border-brand-border rounded-lg text-xs font-medium text-slate-300 transition-colors" onclick="quickAction('Debug codebase')">
+          <i class="fa-solid fa-bug text-brand-muted text-[11px]"></i>
+          <span>Debug</span>
+        </button>
+
+        <button class="flex items-center space-x-2 px-3 py-1.5 bg-brand-card hover:bg-brand-hover border border-brand-border rounded-lg text-xs font-medium text-slate-300 transition-colors" onclick="quickAction('Run AI Agent task')">
+          <i class="fa-solid fa-robot text-brand-muted text-[11px]"></i>
+          <span>Agent</span>
+        </button>
+
+        <button class="flex items-center space-x-2 px-3 py-1.5 bg-brand-card hover:bg-brand-hover border border-brand-border rounded-lg text-xs font-medium text-slate-300 transition-colors" onclick="quickAction('Create issue in GitHub')">
+          <i class="fa-regular fa-circle-dot text-brand-muted text-[11px]"></i>
+          <span>Create issue</span>
+        </button>
+
+        <!-- Write Code Dropdown -->
+        <div class="relative">
+          <button id="writeCodeBtn" class="flex items-center space-x-2 px-3 py-1.5 bg-brand-card hover:bg-brand-hover border border-brand-border rounded-lg text-xs font-medium text-slate-300 transition-colors">
+            <i class="fa-regular fa-file-code text-brand-muted text-[11px]"></i>
+            <span>Write code</span>
+            <i class="fa-solid fa-chevron-down text-[9px] text-brand-muted"></i>
+          </button>
+
+          <div id="writeCodeMenu" class="hidden absolute left-0 top-full mt-2 w-40 bg-brand-card border border-brand-border rounded-xl dropdown-shadow py-1 z-50">
+            <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white" onclick="quickAction('Write Component')">React Component</button>
+            <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white" onclick="quickAction('Write API Endpoint')">Node.js API</button>
+            <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white" onclick="quickAction('Write Tailwind UI')">Tailwind Layout</button>
+          </div>
+        </div>
+
+        <!-- Git Options Dropdown -->
+        <div class="relative">
+          <button id="gitBtn" class="flex items-center space-x-2 px-3 py-1.5 bg-brand-card hover:bg-brand-hover border border-brand-border rounded-lg text-xs font-medium text-slate-300 transition-colors">
+            <i class="fa-solid fa-code-branch text-brand-muted text-[11px]"></i>
+            <span>Git</span>
+            <i class="fa-solid fa-chevron-down text-[9px] text-brand-muted"></i>
+          </button>
+
+          <div id="gitMenu" class="hidden absolute left-0 top-full mt-2 w-40 bg-brand-card border border-brand-border rounded-xl dropdown-shadow py-1 z-50">
+            <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white" onclick="quickAction('Git Commit & Push')">Commit & Push</button>
+            <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white" onclick="quickAction('Create Branch')">Create Branch</button>
+            <button class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-brand-hover hover:text-white" onclick="quickAction('Open Pull Request')">Create PR</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- BOTTOM FOOTER DISCLAIMER (Matches Screenshot Footer) -->
+  <footer class="py-2.5 text-center text-[11px] text-brand-muted bg-brand-bg border-t border-brand-border/30">
+    <span class="hover:underline cursor-pointer">Copilot</span> uses AI. Check for mistakes.
+  </footer>
+
+  <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+  <script>
+    // --- DROPDOWN TOGGLE LOGIC ---
+    function setupDropdown(buttonId, menuId) {
+      const btn = document.getElementById(buttonId);
+      const menu = document.getElementById(menuId);
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Clos
